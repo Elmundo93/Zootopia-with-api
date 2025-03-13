@@ -1,5 +1,5 @@
 import json
-
+from dataFetcha import fetch_animal_data
 
 def generate_animal_cards(animals):
     cards_html = ""
@@ -19,23 +19,43 @@ def generate_animal_cards(animals):
     return cards_html
 
 
-def generate_final_html(json_file, html_template_file, output_file):
-    with open(json_file, "r", encoding="utf-8") as file:
-        animals = json.load(file)
+def generate_final_html(animal_name, html_template_file, output_file):
+    animals = fetch_animal_data(animal_name)  # Use the imported function
 
-    with open(html_template_file, "r", encoding="utf-8") as file:
-        html_template = file.read()
+    if animals is None:
+        print("Skipping HTML generation due to missing data.")
+        return
+
+    try:
+        with open(html_template_file, "r", encoding="utf-8") as file:
+            html_template = file.read()
+    except FileNotFoundError:
+        print(f"Error: Template file '{html_template_file}' not found.")
+        return
 
     animals_html = generate_animal_cards(animals)
-
     final_html = html_template.replace("__REPLACE_ANIMALS_INFO__", animals_html)
 
+    try:
+        with open(output_file, "w", encoding="utf-8") as file:
+            file.write(final_html)
+        print(f"Final HTML generated successfully: {output_file}")
+    except IOError:
+        print(f"Error writing to output file '{output_file}'. Please check permissions.")
 
-    with open(output_file, "w", encoding="utf-8") as file:
-        file.write(final_html)
 
-    print("Final HTML generated successfully.")
+if __name__ == "__main__":
+    print("Welcome to the Animal Info Generator!")
 
+    while True:
+        animal_name = input("Enter an animal name (or type 'exit' to quit): ").strip().lower()
 
-# Example usage:
-generate_final_html("animals_data.json", "animals_template.html", "animals_repository.html")
+        if animal_name == "exit":
+            print("Exiting program. Have a great day!")
+            break
+
+        if not animal_name:
+            print("Invalid input. Please enter a valid animal name.")
+            continue
+
+        generate_final_html(animal_name, "animals_template.html", "animals_repository.html")

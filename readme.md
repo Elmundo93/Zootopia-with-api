@@ -15,12 +15,6 @@
 
 ---
 
-## 📸 **Preview**
-🚀 *Here’s how the generated HTML looks:*
-![Animal Card Preview](https://via.placeholder.com/600x300?text=Animal+Card+Preview)
-
----
-
 ## 🛠️ **Installation & Setup**
 ### 1️⃣ **Clone the Repository**
 ```sh

@@ -1,4 +1,4 @@
-import json
+
 from dataFetcha import fetch_animal_data
 
 def generate_animal_cards(animals):
